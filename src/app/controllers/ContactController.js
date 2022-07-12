@@ -1,3 +1,5 @@
+const ContactsRepository = require('../repositories/ContactRepository');
+
 class ContactController {
   index(request, response) {
     // Listar todos os contatos
