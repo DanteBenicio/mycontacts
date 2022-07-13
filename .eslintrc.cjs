@@ -11,5 +11,12 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'class-methods-use-this': 'off',
+    'no-unused-vars': ['error', { argsIgnorePattern: 'next' }],
+    'no-promise-executor-return': 'off',
+    'consistent-return': 'off',
+    camelcase: 'off',
+    'object-curly-newline': 'off',
+    'no-tabs': 'off',
   },
 };
