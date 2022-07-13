@@ -1,17 +1,25 @@
-/* eslint-disable no-tabs */
 const db = require('../../database');
 
-class ContactRepository {
+class ContactsRepository {
   async findAll(orderBy = 'ASC') {
     const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
 
-    const rows = await db.query(`SELECT * FROM contacts ORDER BY name ${direction}`);
+    const rows = await db.query(`
+			SELECT contacts.*, categories.name AS category_name
+			FROM contacts
+			LEFT JOIN categories ON categories.id = contacts.category_id
+			ORDER BY contacts.name ${direction}`);
 
     return rows;
   }
 
   async findById(id) {
-    const [row] = await db.query('SELECT * FROM contacts WHERE id = $1', [id]);
+    const [row] = await db.query(`
+			SELECT contacts.*, categories.name AS category_name
+			FROM contacts
+			LEFT JOIN categories ON categories.id = contacts.category_id
+			WHERE contacts.id = $1
+		`, [id]);
 
     return row;
   }
@@ -33,7 +41,7 @@ class ContactRepository {
       name, email, phone, category_id,
     } = newContact;
 
-    // create contact inserting the newContact props and returning the new contact created
+    // create contact inserting the newContact props and returns the new contact created
     const [row] = await db.query(`
 			INSERT INTO contacts(name, email, phone, category_id)
 			VALUES($1, $2, $3, $4)
@@ -59,4 +67,4 @@ class ContactRepository {
   }
 }
 
-module.exports = new ContactRepository();
+module.exports = new ContactsRepository();
